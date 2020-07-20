@@ -1,4 +1,3 @@
-#!/home/pelp/cbn-work-related/pfw/venv python3
 from tkinter import *
 from price_calc_backend import price_ad_bw
 
@@ -71,9 +70,9 @@ class Price_calc():
             activebackground=light_green_offset,
             command=self.window.destroy,
         )
-        self.go_again_btn = Button(
+        self.clear_btn = Button(
             master=self.frame3,
-            text="Go again",
+            text="Clear",
             borderwidth=2,
             font=("Noto Mono", 10),
             bg=light_green,
@@ -117,7 +116,6 @@ class Price_calc():
             textvariable=self.entry_text
         )
         self.photo_amount_ent.bind("<Button-1>", self.clear_default)
-        # ------------------------------------------------check buttons
         self.bg_color_var = BooleanVar()
         self.bg_color_cb = Checkbutton(
             master=self.frame5,
@@ -224,10 +222,9 @@ class Price_calc():
             if i.get():
                 price_bw += 3
         try:
-            if int(self.photo_amount_ent.get()) <= 3:
-
+            if self.photo_var.get() and int(self.photo_amount_ent.get()) <= 3:
                 for _ in range(int(self.photo_amount_ent.get())):
-                    price_bw += 5    
+                    price_bw += 5
                 self.text_box.pack_forget()
                 self.aditional_opt_lbl.pack_forget()
                 self.frame5.grid_forget()
@@ -246,8 +243,8 @@ class Price_calc():
                 )
                 price_lbl.pack()
                 self.quit_btn.grid(row=0, column=1, padx=30)
-                self.go_again_btn.grid(row=0, column=0, padx=30)
-            else:
+                self.clear_btn.grid(row=0, column=0, padx=30)
+            elif self.photo_var.get() and int(self.photo_amount_ent.get()) >= 4:
                 self.pop_up_window = Tk()
                 self.pop_up_window.title("Error")
                 self.pop_up_window.resizable(False, False)
@@ -256,6 +253,26 @@ class Price_calc():
                 self.pop_up_lbl = Label(master=self.pop_up_frm, text="3 Photo max!")
                 self.pop_up_lbl.pack()
                 self.pop_up_window.mainloop()
+            elif self.photo_var.get() == False:
+                self.text_box.pack_forget()
+                self.aditional_opt_lbl.pack_forget()
+                self.frame5.grid_forget()
+                self.frame4.grid_forget()
+                self.frame1.grid_forget()
+                self.sub_btn.pack_forget()
+                price_lbl = Label(
+                    master=self.frame2,
+                    text=f"Your total comes out to ${price_bw} for {word_count} words",
+                    padx=30,
+                    pady=30,
+                    font=("Noto Mono", 10),
+                    relief=SUNKEN,
+                    borderwidth=2,
+                    bg=light_green_offset
+                )
+                price_lbl.pack()
+                self.quit_btn.grid(row=0, column=1, padx=30)
+                self.clear_btn.grid(row=0, column=0, padx=30)
         except ValueError:
             self.pop_up_window = Tk()
             self.pop_up_window.title("Error")
@@ -265,7 +282,6 @@ class Price_calc():
             self.pop_up_lbl = Label(master=self.pop_up_frm, text="Photo amount must be number!")
             self.pop_up_lbl.pack()
             self.pop_up_window.mainloop()
-            
 
     def photo_amount(self):
         self.photo_cb.grid_forget()
